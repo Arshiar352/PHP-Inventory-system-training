@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="fa" dir="rtl">
     <head>
-        <title>Home Page</title>
+        <meta charset="UTF-8">
+        <title>صفحه ورود</title>
     </head> 
     <body>
-        <h1>Home Page</h1>
-        <p>Welcome to the home page!</p> 
-        </body>
+       
+        <h1>صفحه ورود</h1>
+        <p>به صفحه ورود خوش آمدید.</p> 
+    </body>
 
-    </html>
+</html>
