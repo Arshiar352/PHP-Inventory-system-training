@@ -27,6 +27,7 @@ if ($method === 'POST') {
                   'price' => $price,
                  'quantity' => $quantity
                  ];
+                 
 
          echo $name . PHP_EOL;
          echo $price . PHP_EOL;
