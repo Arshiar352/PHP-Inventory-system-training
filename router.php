@@ -7,6 +7,7 @@ switch ($path) {
 
     case '/login':
         require_once __DIR__ . '/Controllers/AuthController.php';   
+        
 
         $auth = new AuthController();
         $auth->showLogin();
