@@ -27,7 +27,8 @@ switch ($path) {
         break;
 
     case '/products':
-        require_once __DIR__ . '/Controllers/ProductController.php';    
+         require_once __DIR__ . '/Controllers/ProductController.php';  
+
 
         if ($method === 'GET') {
 
