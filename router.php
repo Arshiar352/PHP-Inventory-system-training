@@ -7,7 +7,6 @@ switch ($path) {
 
     case '/login':
         require_once __DIR__ . '/Controllers/AuthController.php';   
-        
 
         $auth = new AuthController();
         $auth->showLogin();
@@ -56,8 +55,10 @@ switch ($path) {
         break;
 
     default:
-        http_response_code(404);
-        echo "404 - Page Not Found";
+        require_once __DIR__ . '/Controllers/AuthController.php';   
+
+        $auth = new AuthController();
+        $auth->showLogin();
         break;
 }
 
