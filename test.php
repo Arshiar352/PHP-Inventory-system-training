@@ -129,16 +129,3 @@ if ($method === 'POST') {
 
 ?>
 
-<?php
-
-session_start();
-
-$_SESSION['user_id'] = 5;
-
-if (isset($_SESSION['user_id'])) {
-
-echo 'welcome';
-} else {
-
-echo 'Please log in first!';
-}
