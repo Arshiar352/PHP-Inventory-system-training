@@ -3,8 +3,37 @@
 class AuthController {
 
     public function showLogin() {
-       require_once __DIR__ . '/../Views/Auth/login.php';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+             require_once __DIR__ . '/../Views/Auth/login.php';
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $login = $_POST['login'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+
+
+            if ((empty($login)) && (empty($password))) {
+
+                echo 'You must fill the fields.';
+            
+            } elseif ((empty($login))) {
+
+                echo 'Please enter your username, email or mobile.';
+            } elseif  (empty($password)) {
+
+                echo 'Please enter your password.';
+            } elseif (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+                
+                echo 'Login is Email.';
+            } else {
+
+                echo 'Fields are valid.'; // logged in as number or username!
+            }
     }
+ }
+
 
     public function showRegister() {
 
