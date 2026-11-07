@@ -1,7 +1,22 @@
 <?php 
 
+session_start();
+
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
+$protectedRoutes = ['/home', '/products', '/users'];
+$isLoggedIn = isset($_SESSION['user_id']);
+$guestRoutes = ['/register', '/login', '/'];
+
+if ((!$isLoggedIn) && (in_array($path, $protectedRoutes))) {
+
+             header('Location: /login');
+             exit;
+    } elseif (($isLoggedIn) && (in_array($path, $guestRoutes))) {
+
+             header('Location: /home');
+             exit;
+ }
 
 switch ($path) {
 
