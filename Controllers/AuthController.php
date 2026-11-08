@@ -63,22 +63,22 @@ class AuthController {
         'mobile' => $mobile
         ];
 
-        $passCheck = [$password !== $confirmPassword];
+        $passCheck = $password !== $confirmPassword;
 
 
 
             if (empty($username) || empty($email) || empty($mobile) || empty($password)  || empty($confirmPassword)) {
 
-                $error[''] = 'Please fill all fields.';
+                $errors[''] = 'Please fill all fields.';
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-                $error['email'] = 'Please enter your email address.';
+                $errors['email'] = 'Please enter your email address.';
             } elseif ($passCheck) {
 
-                $error['password, confirmPassword'] = 'Passwords do not match!';
+                $errors['password, confirmPassword'] = 'Passwords do not match!';
             } elseif (!is_numeric($mobile)) {
 
-                $error['mobile'] = 'Please enter your Phone Number.';
+                $errors['mobile'] = 'Please enter your Phone Number.';
             }
             
             
