@@ -118,6 +118,8 @@ class AuthController {
                         $errors['mobile'] = 'Phone number already exists.';;
                     }
 
+                    require_once __DIR__ . '/../Config/register.php';
+
                     if (!$usernameExists && !$emailExists && !$mobileExists) {
 
                         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
