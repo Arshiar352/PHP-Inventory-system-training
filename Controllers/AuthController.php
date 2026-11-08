@@ -1,7 +1,5 @@
 <?php
 
-$oldValues =[];
-
 require_once __DIR__  . '/../Config/Database.php';
 
 class AuthController {
@@ -41,6 +39,8 @@ class AuthController {
 
     public function showRegister() {
 
+    $oldValues =[];
+
          if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
             global $pdo;
@@ -48,6 +48,12 @@ class AuthController {
              require_once __DIR__ . '/../Views/Auth/register.php';
 
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        $oldValues = [
+        'username' => $username,
+        'email' => $email,
+        'mobile' => $mobile
+        ];
 
         global $pdo;
         $username = $_POST['username'] ?? '';
