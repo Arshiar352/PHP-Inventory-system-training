@@ -105,20 +105,19 @@ class AuthController {
 
                         if ($usernameExists) {
 
-                        $errors['username'] = 'Username already exists.';;
+                        $errors['username'] = 'Username already exists.';
                     }
 
                        if ($emailExists) {
 
-                        $errors['email'] = 'Email already exists.';;
+                        $errors['email'] = 'Email already exists.';
                     }
 
                        if ($mobileExists) {
 
-                        $errors['mobile'] = 'Phone number already exists.';;
+                        $errors['mobile'] = 'Phone number already exists.';
                     }
 
-                    require_once __DIR__ . '/../Config/register.php';
 
                     if (!$usernameExists && !$emailExists && !$mobileExists) {
 
@@ -130,10 +129,12 @@ class AuthController {
 
                         header('Location: /login');
                         exit;
-                }
-            } 
+                } else {
+                 require_once __DIR__ . '/../Auth/register.php';
+                } 
+            }
+
         }
 
     }
-
 }
