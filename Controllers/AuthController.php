@@ -133,7 +133,7 @@ class AuthController {
                         header('Location: /login');
                         exit;
                 } else {
-                 require_once __DIR__ . '/../ٰViews/Auth/register.php';
+                 require_once __DIR__ . '/../Views/Auth/register.php';
                 } 
             }
 
