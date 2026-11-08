@@ -11,15 +11,15 @@
         <form action="/register" method="post">
 
             <label for="mobile">شماره مبایل: </label>
-            <input type="tel" id="mobile" name="mobile" required>
+            <input type="tel" id="mobile" name="mobile" value="<?= htmlspecialchars($oldValues['mobile'] ?? '') ?>" required>
             <br><br>
 
             <label for="email"> ایمیل:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" value="<?= htmlspecialchars($oldValues['email'] ?? '') ?>" required>
             <br><br>
   
             <label for="username">نام کاربری:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" value="<?= htmlspecialchars($oldValues['username'] ?? '') ?>" required>
             <br><br>
 
             <label for="password">رمز عبور:</label>
