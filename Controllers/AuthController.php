@@ -49,18 +49,19 @@ class AuthController {
 
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        $oldValues = [
-        'username' => $username,
-        'email' => $email,
-        'mobile' => $mobile
-        ];
-
         global $pdo;
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
         $mobile = $_POST['mobile'] ?? '';
         $password = $_POST['password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
+
+        $oldValues = [
+        'username' => $username,
+        'email' => $email,
+        'mobile' => $mobile
+        ];
+
 
             if (empty($username) || empty($email) || empty($mobile) || empty($password)  || empty($confirmPassword)) {
 
