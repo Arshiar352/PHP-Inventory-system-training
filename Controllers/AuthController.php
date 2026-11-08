@@ -1,5 +1,7 @@
 <?php
 
+$oldValues =[];
+
 require_once __DIR__  . '/../Config/Database.php';
 
 class AuthController {
@@ -96,17 +98,17 @@ class AuthController {
 
                         if ($usernameExists) {
 
-                        echo 'Username already exists.';
+                        $errors['username'] = 'Username already exists.';;
                     }
 
                        if ($emailExists) {
 
-                        echo 'Email already exists.';
+                        $errors['email'] = 'Email already exists.';;
                     }
 
                        if ($mobileExists) {
 
-                        echo 'Phone number already exists.';
+                        $errors['mobile'] = 'Phone number already exists.';;
                     }
 
                     if (!$usernameExists && !$emailExists && !$mobileExists) {
