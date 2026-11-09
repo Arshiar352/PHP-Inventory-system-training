@@ -52,8 +52,8 @@
             <label for="confirm_password">تکرار رمز عبور:</label>
             <input type="password" id="confirm_password" name="confirm_password" >
             <?php
-                if (isset($errors['password'])) {
-                    echo $errors['password'];
+                if (isset($errors['confirmPassword'])) {
+                    echo $errors['confirmPassword'];
                 }
             ?>
             <br><br>

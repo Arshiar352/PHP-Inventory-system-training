@@ -71,31 +71,31 @@ class AuthController {
 
                 $errors['general'] = 'Please fill all fields.';
             } 
-            
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-                $errors['email'] = 'Please enter your email address.';
-            } 
-            
-            if ($passCheck) {
-
-                $errors['password, confirmPassword'] = 'Passwords do not match!';
-            } 
-            
-            if (!is_numeric($mobile)) {
-
-                $errors['mobile'] = 'Please enter your Phone Number.';
-            } 
-            
-            if (empty($username)) {
-
-             $errors['username'] = 'Please enter your username.';
-            }
 
             if ((empty($password)) || (empty($confirmPassword))) {
 
             $errors['password'] = 'Please enter your password.';
             }
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            $errors['email'] = 'Please enter a valid email address.';
+            }
+
+            if (!is_numeric($mobile)) {
+                
+            $errors['mobile'] = 'Please enter a valid phone number.';
+            }
+
+            if (empty($username)) {
+
+            $errors['username'] = 'Please enter your username.';
+            }
+           
+            if ($passCheck) {
+
+                $errors['confirmPassword'] = 'Passwords do not match!';
+            } 
             
             if (!empty($errors)) {
 
@@ -152,6 +152,7 @@ class AuthController {
                         header('Location: /login');
                         exit;
                           } else {
+
                              require_once __DIR__ . '/../Views/Auth/register.php';
                     } 
                 } 
