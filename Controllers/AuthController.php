@@ -4,37 +4,53 @@ require_once __DIR__  . '/../Config/Database.php';
 
 class AuthController {
 
+
+
     public function showLogin() {
+
+     $errors = [];
+     $oldValues = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-             require_once __DIR__ . '/../Views/Auth/login.php';
+            global $pdo;
+
+            require_once __DIR__ . '/../Views/Auth/login.php';
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            global $pdo;
             $login = $_POST['login'] ?? '';
             $password = $_POST['password'] ?? '';
 
+            $sql = "SELECT id, username, mobile, email, password
+                    FROM users
+                    WHERE username = ?
+                    WHERE mobile = ?
+                    WHERE email = ?";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt -> execute([$login, $login, $login]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-            if ((empty($login)) && (empty($password))) {
+                 if ($user !== false && password_verify($password, $user['password'])) {
 
-                echo 'You must fill the fields.';
-            
-            } elseif ((empty($login))) {
+                    session_regenerate_id(true);
 
-                echo 'Please enter your username, email or mobile.';
-            } elseif  (empty($password)) {
+                    $_SESSION['user_id'] = $user['id'];
 
-                echo 'Please enter your password.';
-            } elseif (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-                
-                echo 'Login is Email.';
-            } else {
+                    header('Location: /home');
+                    exit;
 
-                echo 'Fields are valid.'; // logged in as number or username!
+                } else {
+
+                    $errors['login'] = 'Invalid username, email, mobile or password.';
+                                require_once __DIR__ . '/../Views/Auth/login.php';
+                }
             }
         }
-    }
+    
+    
 
 
     public function showRegister() {
