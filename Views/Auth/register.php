@@ -15,7 +15,7 @@
 
             <label for="mobile">شماره مبایل: </label>
             <input
-            
+
                 type="tel"
                 id="mobile"
                 name="mobile"
@@ -62,8 +62,8 @@
             <label for="confirm_password">تکرار رمز عبور:</label>
             <input type="password" id="confirm_password" name="confirm_password" >
             <?php
-                if (isset($errors['confirmPassword'])) {
-                    echo $errors['confirmPassword'];
+                if (isset($errors['confirm_password'])) {
+                    echo $errors['confirm_password'];
                 }
             ?>
             <br><br>

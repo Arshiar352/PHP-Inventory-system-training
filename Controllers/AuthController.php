@@ -17,10 +17,18 @@ class AuthController {
 
             require_once __DIR__ . '/../Views/Auth/login.php';
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+            
+            
             global $pdo;
             $login = $_POST['login'] ?? '';
             $password = $_POST['password'] ?? '';
+
+                if (empty($login) || empty($password)) {
+
+                    $errors['login'] = 'Please fill in all fields.';
+                    require_once __DIR__ . '/../Views/Auth/login.php';
+                    return;
+                    } else {
 
             $sql = "SELECT id, username, mobile, email, password
                     FROM users
@@ -49,8 +57,8 @@ class AuthController {
                 }
             }
         }
-    
-    
+    }   
+
 
 
     public function showRegister() {
@@ -124,7 +132,7 @@ class AuthController {
            
             if ($passCheck) {
 
-                $errors['confirmPassword'] = 'Passwords do not match!';
+                $errors['confirm_password'] = 'Passwords do not match!';
             } 
             
             if (!empty($errors)) {
