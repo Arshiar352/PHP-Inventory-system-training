@@ -54,6 +54,20 @@ class AuthController {
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
         $mobile = $_POST['mobile'] ?? '';
+
+        $mobile = trim($_POST['mobile'] ?? '');
+
+        $mobile = strtr($mobile, [
+            '۰' => '0', '۱' => '1', '۲' => '2',
+            '۳' => '3', '۴' => '4', '۵' => '5',
+            '۶' => '6', '۷' => '7', '۸' => '8',
+            '۹' => '9',
+            '٠' => '0', '١' => '1', '٢' => '2',
+            '٣' => '3', '٤' => '4', '٥' => '5',
+            '٦' => '6', '٧' => '7', '٨' => '8',
+            '٩' => '9'
+        ]);
+
         $password = $_POST['password'] ?? '';
         $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -82,7 +96,7 @@ class AuthController {
             $errors['email'] = 'Please enter a valid email address.';
             }
 
-            if (!is_numeric($mobile)) {
+            if (!preg_match('/^09[0-9]{9}$/', $mobile)) {
                 
             $errors['mobile'] = 'Please enter a valid phone number.';
             }

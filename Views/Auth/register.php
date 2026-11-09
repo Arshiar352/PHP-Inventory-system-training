@@ -14,7 +14,17 @@
             <?php endif; ?>
 
             <label for="mobile">شماره مبایل: </label>
-            <input type="tel" id="mobile" name="mobile" value="<?= htmlspecialchars($oldValues['mobile'] ?? '') ?>" >
+            <input
+            
+                type="tel"
+                id="mobile"
+                name="mobile"
+                inputmode="numeric"
+                minlength="11"
+                maxlength="11"
+                pattern="09[0-9]{9}"
+                placeholder="09123456789"
+                value="<?= htmlspecialchars($oldValues['mobile'] ?? '') ?>">  
             <?php
                 if (isset($errors['mobile'])) {
                     echo $errors['mobile'];
