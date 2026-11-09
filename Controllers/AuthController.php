@@ -66,23 +66,42 @@ class AuthController {
         $passCheck = $password !== $confirmPassword;
 
 
-
+       
             if (empty($username) || empty($email) || empty($mobile) || empty($password)  || empty($confirmPassword)) {
 
-                $errors[''] = 'Please fill all fields.';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['general'] = 'Please fill all fields.';
+            } 
+            
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
                 $errors['email'] = 'Please enter your email address.';
-            } elseif ($passCheck) {
+            } 
+            
+            if ($passCheck) {
 
                 $errors['password, confirmPassword'] = 'Passwords do not match!';
-            } elseif (!is_numeric($mobile)) {
+            } 
+            
+            if (!is_numeric($mobile)) {
 
                 $errors['mobile'] = 'Please enter your Phone Number.';
+            } 
+            
+            if (empty($username)) {
+
+             $errors['username'] = 'Please enter your username.';
+            }
+
+            if ((empty($password)) || (empty($confirmPassword))) {
+
+            $errors['password'] = 'Please enter your password.';
             }
             
+            if (!empty($errors)) {
+
+                require_once __DIR__ . '/../Views/Auth/register.php';
             
-            else {
+                } else {
 
                 $sql = "SELECT id FROM users WHERE username = ?";
                 $stmt = $pdo->prepare($sql);
@@ -132,12 +151,13 @@ class AuthController {
 
                         header('Location: /login');
                         exit;
-                } else {
-                 require_once __DIR__ . '/../Views/Auth/register.php';
+                          } else {
+                             require_once __DIR__ . '/../Views/Auth/register.php';
+                    } 
                 } 
-            }
-
+            }     
         }
+    } 
 
-    }
-}
+
+
