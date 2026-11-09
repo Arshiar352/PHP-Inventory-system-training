@@ -25,8 +25,8 @@ class AuthController {
             $sql = "SELECT id, username, mobile, email, password
                     FROM users
                     WHERE username = ?
-                    WHERE mobile = ?
-                    WHERE email = ?";
+                    OR mobile = ?
+                    OR email = ?";
 
             $stmt = $pdo->prepare($sql);
             $stmt -> execute([$login, $login, $login]);
