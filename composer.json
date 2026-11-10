@@ -1,0 +1,6 @@
+{
+    "require": {
+        "hekmatinasser/verta": "^9.3",
+        "nesbot/carbon": "^3.15"
+    }
+}
