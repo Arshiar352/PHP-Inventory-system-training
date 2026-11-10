@@ -3,6 +3,7 @@
 
 session_start();
 
+
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $protectedRoutes = ['/home', '/products', '/users'];
@@ -78,7 +79,13 @@ switch ($path) {
         $user->showUsers();
         break;
 
-        
+    case '/logout':
+        require_once __DIR__ . '/Controllers/AuthController.php';
+
+        $controller = new AuthController();
+        $controller->logout();
+        break;
+
 
     default:
         http_response_code(404);

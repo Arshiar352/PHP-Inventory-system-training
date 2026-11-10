@@ -18,10 +18,12 @@ class AuthController {
             require_once __DIR__ . '/../Views/Auth/login.php';
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
-            
+
             global $pdo;
             $login = $_POST['login'] ?? '';
             $password = $_POST['password'] ?? '';
+
+            $oldValues['login'] = $login;
 
                 if (empty($login) || empty($password)) {
 
@@ -77,8 +79,6 @@ class AuthController {
         global $pdo;
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
-        $mobile = $_POST['mobile'] ?? '';
-
         $mobile = trim($_POST['mobile'] ?? '');
 
         $mobile = strtr($mobile, [
@@ -196,6 +196,18 @@ class AuthController {
                 } 
             }     
         }
+
+        public function logout() {
+
+            session_start();
+
+            unset($_SESSION['user_id']);
+
+            header('Location: /login');
+            exit;
+        }
+
+        
     } 
 
 
