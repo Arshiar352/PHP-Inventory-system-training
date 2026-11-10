@@ -34,17 +34,17 @@ require __DIR__ . '/../partials/head.php';
                                     <div class="input-group <?= isset($errors['mobile']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-phone"></i></span>
                                         <input type="tel"
-                                               class="form-control <?= isset($errors['mobile']) ? 'is-invalid' : '' ?>"
-                                               id="mobile"
-                                               name="mobile"
-                                               inputmode="numeric"
-                                               minlength="11"
-                                               maxlength="11"
-                                               pattern="09[0-9]{9}"
-                                               placeholder="09123456789"
-                                               value="<?= htmlspecialchars($oldValues['mobile'] ?? '') ?>"
-                                               autocomplete="tel"
-                                               required>
+                                            class="form-control <?= isset($errors['mobile']) ? 'is-invalid' : '' ?>"
+                                            id="mobile"
+                                            name="mobile"
+                                            inputmode="numeric"
+                                            minlength="11"
+                                            maxlength="11"
+                                            pattern="09[0-9]{9}"
+                                            placeholder="09123456789"
+                                            value="<?= htmlspecialchars($oldValues['mobile'] ?? '') ?>"
+                                            autocomplete="tel"
+                                            required>
                                         <?php if (isset($errors['mobile'])): ?>
                                             <div class="invalid-feedback"><?= htmlspecialchars($errors['mobile']) ?></div>
                                         <?php endif; ?>
@@ -56,13 +56,13 @@ require __DIR__ . '/../partials/head.php';
                                     <div class="input-group <?= isset($errors['email']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                         <input type="email"
-                                               class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
-                                               id="email"
-                                               name="email"
-                                               placeholder="name@example.com"
-                                               value="<?= htmlspecialchars($oldValues['email'] ?? '') ?>"
-                                               autocomplete="email"
-                                               required>
+                                            class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                                            id="email"
+                                            name="email"
+                                            placeholder="name@example.com"
+                                            value="<?= htmlspecialchars($oldValues['email'] ?? '') ?>"
+                                            autocomplete="email"
+                                            required>
                                         <?php if (isset($errors['email'])): ?>
                                             <div class="invalid-feedback"><?= htmlspecialchars($errors['email']) ?></div>
                                         <?php endif; ?>
@@ -74,13 +74,13 @@ require __DIR__ . '/../partials/head.php';
                                     <div class="input-group <?= isset($errors['username']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-person"></i></span>
                                         <input type="text"
-                                               class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>"
-                                               id="username"
-                                               name="username"
-                                               placeholder="نام کاربری دلخواه خود را وارد کنید"
-                                               value="<?= htmlspecialchars($oldValues['username'] ?? '') ?>"
-                                               autocomplete="username"
-                                               required>
+                                            class="form-control <?= isset($errors['username']) ? 'is-invalid' : '' ?>"
+                                            id="username"
+                                            name="username"
+                                            placeholder="نام کاربری دلخواه خود را وارد کنید"
+                                            value="<?= htmlspecialchars($oldValues['username'] ?? '') ?>"
+                                            autocomplete="username"
+                                            required>
                                         <?php if (isset($errors['username'])): ?>
                                             <div class="invalid-feedback"><?= htmlspecialchars($errors['username']) ?></div>
                                         <?php endif; ?>
@@ -92,16 +92,16 @@ require __DIR__ . '/../partials/head.php';
                                     <div class="input-group <?= isset($errors['password']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                         <input type="password"
-                                               class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
-                                               id="password"
-                                               name="password"
-                                               placeholder="رمز عبور"
-                                               autocomplete="new-password"
-                                               required>
+                                            class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>"
+                                            id="password"
+                                            name="password"
+                                            placeholder="رمز عبور"
+                                            autocomplete="new-password"
+                                            required>
                                         <button class="btn btn-outline-secondary"
-                                                type="button"
-                                                data-toggle-password="password"
-                                                aria-label="نمایش رمز عبور">
+                                            type="button"
+                                            data-toggle-password="password"
+                                            aria-label="نمایش رمز عبور">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                         <?php if (isset($errors['password'])): ?>
@@ -115,16 +115,16 @@ require __DIR__ . '/../partials/head.php';
                                     <div class="input-group <?= isset($errors['confirm_password']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
                                         <input type="password"
-                                               class="form-control <?= isset($errors['confirm_password']) ? 'is-invalid' : '' ?>"
-                                               id="confirm_password"
-                                               name="confirm_password"
-                                               placeholder="تکرار رمز عبور"
-                                               autocomplete="new-password"
-                                               required>
+                                            class="form-control <?= isset($errors['confirm_password']) ? 'is-invalid' : '' ?>"
+                                            id="confirm_password"
+                                            name="confirm_password"
+                                            placeholder="تکرار رمز عبور"
+                                            autocomplete="new-password"
+                                            required>
                                         <button class="btn btn-outline-secondary"
-                                                type="button"
-                                                data-toggle-password="confirm_password"
-                                                aria-label="نمایش رمز عبور">
+                                            type="button"
+                                            data-toggle-password="confirm_password"
+                                            aria-label="نمایش رمز عبور">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                         <?php if (isset($errors['confirm_password'])): ?>

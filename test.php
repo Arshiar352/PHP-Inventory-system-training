@@ -1,27 +1,30 @@
 <html>
-    <head>
-        <title>Add product</title>
-    </head>
-    <body>
-        <form method="POST">
-            <label for="name">Product Name:</label>
-            <input type="text" name="name" id="name">
 
-            <label for="price">Price:</label>
-            <input type="number" name="price" id="price">
+<head>
+    <title>Add product</title>
+</head>
 
-            <label for="quantity">Quantity:</label>
-            <input type="number" name="quantity" id="quantity">
+<body>
+    <form method="POST">
+        <label for="name">Product Name:</label>
+        <input type="text" name="name" id="name">
 
-            <input type="submit" value="Add Product">
-        </form>
-        <input toggle type="button" value="View Products" onclick="window.location.href='products.json'">
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price">
 
-    </body>
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity">
+
+        <input type="submit" value="Add Product">
+    </form>
+    <input toggle type="button" value="View Products" onclick="window.location.href='products.json'">
+
+</body>
+
 </html>
 
 
-<?php 
+<?php
 
 if (file_exists('Data/products.json')) {
     $json = file_get_contents('Data/products.json');
@@ -31,25 +34,20 @@ if (file_exists('Data/products.json')) {
     }
 } else {
     $products = [];
-
 }
 
 include 'Functions/product-functions.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if ((!isset($_POST["name"])) || (!isset($_POST["price"])) || (!isset($_POST["quantity"]) )) {
-   echo "Missing field!"; 
-
+    if ((!isset($_POST["name"])) || (!isset($_POST["price"])) || (!isset($_POST["quantity"]))) {
+        echo "Missing field!";
     } elseif (($_POST["name"] === "") || ($_POST["price"] === "") || ($_POST["quantity"] === "")) {
-   echo "Missing field!";
-
+        echo "Missing field!";
     } elseif ((!is_numeric($_POST["price"])) || (!is_numeric($_POST["quantity"]))) {
-   echo "Price and Quantity must be numeric values.";
-
+        echo "Price and Quantity must be numeric values.";
     } elseif (($_POST["price"] < 0) || ($_POST["quantity"] < 0)) {
-   echo "Price and Quantity must be non-negative values.";
-   
+        echo "Price and Quantity must be non-negative values.";
     } else {
         $newProduct = [
             "name" => $_POST["name"],
@@ -59,13 +57,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $products[] = $newProduct;
 
-        $json = json_encode($products); 
+        $json = json_encode($products);
         file_put_contents('Data/products.json', $json);
 
-    echo "Product Name: " . htmlspecialchars($_POST["name"]);
-    echo "Product Price: " . htmlspecialchars($_POST["price"]);
-    echo "Product Quantity: " . htmlspecialchars($_POST["quantity"]);
- }
+        echo "Product Name: " . htmlspecialchars($_POST["name"]);
+        echo "Product Price: " . htmlspecialchars($_POST["price"]);
+        echo "Product Quantity: " . htmlspecialchars($_POST["quantity"]);
+    }
 }
 
 $productFound = false;
@@ -78,17 +76,17 @@ foreach ($products as $index => $product) {
 }
 
 
- echo "Total Available Products: " . countAvailableProducts($products) . "<br><br>";
+echo "Total Available Products: " . countAvailableProducts($products) . "<br><br>";
 
- foreach ($products as $product) {
+foreach ($products as $product) {
     if ($product["quantity"] > 0) {
-    
-    echo "Product Name: " . htmlspecialchars($product["name"]) . "<br>";
-    echo "Product Price: " . htmlspecialchars($product["price"]) . "<br>";
-    echo "Product Quantity: " . htmlspecialchars($product["quantity"]) . "<br>";
-    echo "<br>";
- }
- }
+
+        echo "Product Name: " . htmlspecialchars($product["name"]) . "<br>";
+        echo "Product Price: " . htmlspecialchars($product["price"]) . "<br>";
+        echo "Product Quantity: " . htmlspecialchars($product["quantity"]) . "<br>";
+        echo "<br>";
+    }
+}
 
 
 
@@ -100,32 +98,29 @@ if ($method === 'POST') {
     $price = $_POST['price'];
     $quantity = $_POST['quantity'];
 
- 
 
-        if ((!is_numeric($price)) || (!is_numeric($quantity))) {
-    
-             echo 'You can only use numbers.';
 
-        } elseif (($price < 0) || ($quantity < 0)) {
+    if ((!is_numeric($price)) || (!is_numeric($quantity))) {
 
-             echo 'Invalid. Number cannot be negative.';
+        echo 'You can only use numbers.';
+    } elseif (($price < 0) || ($quantity < 0)) {
 
-         } else {
+        echo 'Invalid. Number cannot be negative.';
+    } else {
 
-               $newProduct = [
+        $newProduct = [
 
-                 'name' => $name,
-                  'price' => $price,
-                 'quantity' => $quantity
-                 ];
-                 
+            'name' => $name,
+            'price' => $price,
+            'quantity' => $quantity
+        ];
 
-         echo $name . PHP_EOL;
-         echo $price . PHP_EOL;
-         echo $quantity . PHP_EOL;
-         echo PHP_EOL;
+
+        echo $name . PHP_EOL;
+        echo $price . PHP_EOL;
+        echo $quantity . PHP_EOL;
+        echo PHP_EOL;
     }
 }
 
 ?>
-

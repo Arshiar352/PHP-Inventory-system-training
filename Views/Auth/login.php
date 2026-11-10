@@ -33,14 +33,14 @@ require __DIR__ . '/../partials/head.php';
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
                                     <input type="text"
-                                           class="form-control"
-                                           id="login"
-                                           name="login"
-                                           value="<?= htmlspecialchars($oldValues['login'] ?? '') ?>"
-                                           placeholder="نام کاربری، ایمیل یا شماره موبایل"
-                                           autocomplete="username"
-                                           required
-                                           autofocus>
+                                        class="form-control"
+                                        id="login"
+                                        name="login"
+                                        value="<?= htmlspecialchars($oldValues['login'] ?? '') ?>"
+                                        placeholder="نام کاربری، ایمیل یا شماره موبایل"
+                                        autocomplete="username"
+                                        required
+                                        autofocus>
                                 </div>
                             </div>
 
@@ -49,16 +49,16 @@ require __DIR__ . '/../partials/head.php';
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                     <input type="password"
-                                           class="form-control"
-                                           id="password"
-                                           name="password"
-                                           placeholder="رمز عبور خود را وارد کنید"
-                                           autocomplete="current-password"
-                                           required>
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        placeholder="رمز عبور خود را وارد کنید"
+                                        autocomplete="current-password"
+                                        required>
                                     <button class="btn btn-outline-secondary"
-                                            type="button"
-                                            data-toggle-password="password"
-                                            aria-label="نمایش رمز عبور">
+                                        type="button"
+                                        data-toggle-password="password"
+                                        aria-label="نمایش رمز عبور">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
