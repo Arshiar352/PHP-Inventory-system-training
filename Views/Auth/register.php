@@ -70,6 +70,34 @@ require __DIR__ . '/../partials/head.php';
                                 </div>
 
                                 <div class="col-12">
+                                    <label for="birth_date" class="form-label fw-medium">
+                                        تاریخ تولد
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="bi bi-calendar-date"></i>
+                                        </span>
+
+                                        <input type="text"
+                                            class="form-control <?= isset($errors['birth_date']) ? 'is-invalid' : '' ?>"
+                                            id="birth_date"
+                                            name="birth_date"
+                                            placeholder="۱۴۰۲/۰۵/۲۰"
+                                            value="<?= htmlspecialchars($oldValues['birth_date'] ?? '') ?>"
+                                            autocomplete="bday"
+                                            inputmode="numeric"
+                                            required>
+
+                                        <?php if (isset($errors['birth_date'])): ?>
+                                            <div class="invalid-feedback">
+                                                <?= htmlspecialchars($errors['birth_date']) ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
                                     <label for="username" class="form-label fw-medium">نام کاربری</label>
                                     <div class="input-group <?= isset($errors['username']) ? 'has-validation' : '' ?>">
                                         <span class="input-group-text"><i class="bi bi-person"></i></span>
