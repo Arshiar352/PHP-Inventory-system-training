@@ -11,14 +11,18 @@ class AuthController
 
     public function showLogin()
     {
-
-        $errors = [];
         $oldValues = [];
+        $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-            global $pdo;
+            $oldValues = $_SESSION['login_old_values'] ?? [];
+            $errors = $_SESSION['login_errors'] ?? [];
 
+            unset($_SESSION['login_errors']);
+            unset($_SESSION['login_old_values']);
+
+            global $pdo;
             require_once __DIR__ . '/../Views/Auth/login.php';
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -32,8 +36,14 @@ class AuthController
             if (empty($login) || empty($password)) {
 
                 $errors['login'] = 'Please fill in all fields.';
-                require_once __DIR__ . '/../Views/Auth/login.php';
-                return;
+            }
+
+            if (!empty($errors)) {
+
+                $_SESSION['login_old_values']    = $oldValues;
+                $_SESSION['login_errors'] = $errors;
+                header('Location: /login');
+                exit;
             } else {
 
                 $sql = "SELECT id, username, mobile, email, password
@@ -58,7 +68,12 @@ class AuthController
                 } else {
 
                     $errors['login'] = 'Invalid username, email, mobile or password.';
-                    require_once __DIR__ . '/../Views/Auth/login.php';
+
+                    $_SESSION['login_old_values'] = $oldValues;
+                    $_SESSION['login_errors'] = $errors;
+
+                    header('Location: /login');
+                    exit;
                 }
             }
         }
@@ -69,12 +84,18 @@ class AuthController
     public function showRegister()
     {
 
-        $oldValues = [];
+
         $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
+            $oldValues = $_SESSION['old_values'] ?? [];
+            $errors = $_SESSION['errors'] ?? [];
+
             global $pdo;
+
+            unset($_SESSION['old_values']);
+            unset($_SESSION['errors']);
 
             require_once __DIR__ . '/../Views/Auth/register.php';
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -107,9 +128,9 @@ class AuthController
                 '٩' => '9'
             ]);
 
-            $birthDate = trim($_POST['birth_date'] ?? '');
+            $birthDateInput = trim($_POST['birth_date'] ?? '');
 
-            $birthDate = strtr($birthDate, [
+            $birthDate = strtr($birthDateInput, [
                 '۰' => '0',
                 '۱' => '1',
                 '۲' => '2',
@@ -132,6 +153,7 @@ class AuthController
                 '٩' => '9'
             ]);
 
+
             $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -139,7 +161,7 @@ class AuthController
                 'username' => $username,
                 'email' => $email,
                 'mobile' => $mobile,
-                'birth_date' => $birthDate
+                'birth_date' => $birthDateInput
             ];
 
             $passCheck = $password !== $confirmPassword;
@@ -192,7 +214,11 @@ class AuthController
 
             if (!empty($errors)) {
 
-                require_once __DIR__ . '/../Views/Auth/register.php';
+                $_SESSION['old_values'] = $oldValues;
+                $_SESSION['errors'] = $errors;
+
+                header('Location: /register');
+                exit;
             } else {
 
 
@@ -245,10 +271,13 @@ class AuthController
 
                     header('Location: /login');
                     exit;
-                } else {
+                } elseif (!empty($errors)) {
 
-                    require_once __DIR__ . '/../Views/Auth/register.php';
-                    return;
+                    $_SESSION['old_values'] = $oldValues;
+                    $_SESSION['errors'] = $errors;
+
+                    header('Location: /register');
+                    exit;
                 }
             }
         }
@@ -257,8 +286,7 @@ class AuthController
     public function logout()
     {
 
-        unset($_SESSION['user_id']);
-
+        session_destroy();
         header('Location: /login');
         exit;
     }
