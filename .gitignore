@@ -1,3 +1,8 @@
+# Database credentials
 Config/Database.php
-.opencode
+
+# Composer dependencies
 /vendor/
+
+# IDE / AI tools
+.opencode
