@@ -15,6 +15,57 @@ require __DIR__ . '/partials/head.php';
         </p>
     </div>
 
+
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+
+            <h2 class="h5 fw-bold mb-3">افزودن محصول</h2>
+
+            <?php if (!empty($errors)): ?>
+
+                <?php foreach ($errors as $error): ?>
+                    <div class="alert alert-danger">
+                        <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                    </div>
+                <?php endforeach; ?>
+
+            <?php endif; ?>
+
+            <form action="/products" method="POST">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">نام محصول</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">تعداد</label>
+                        <input type="number" name="quantity" min="0" step="1" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">تولیدکننده</label>
+                        <input type="text" name="manufacturer" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">نوع محصول</label>
+                        <input type="text" name="type" class="form-control" required>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">
+                    ثبت محصول
+                </button>
+
+            </form>
+        </div>
+    </div>
+
     <?php if (empty($products)): ?>
 
         <div class="card border-0 shadow-sm">
@@ -46,35 +97,39 @@ require __DIR__ . '/partials/head.php';
                                 <th>تعداد</th>
                                 <th>تولیدکننده</th>
                                 <th>نوع محصول</th>
+                                <th>عملیات</th>
                             </tr>
                         </thead>
 
                         <tbody>
-
                             <?php foreach ($products as $index => $product): ?>
-
                                 <tr>
                                     <td><?= $index + 1 ?></td>
 
-                                    <td>
-                                        <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
-                                    </td>
+                                    <td><?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?></td>
+
+                                    <td><?= htmlspecialchars($product['quantity'], ENT_QUOTES, 'UTF-8') ?></td>
+
+                                    <td><?= htmlspecialchars($product['manufacturer'], ENT_QUOTES, 'UTF-8') ?></td>
+
+                                    <td><?= htmlspecialchars($product['type'], ENT_QUOTES, 'UTF-8') ?></td>
 
                                     <td>
-                                        <?= htmlspecialchars($product['quantity'], ENT_QUOTES, 'UTF-8') ?>
-                                    </td>
+                                        <form action="/products" method="POST"
+                                            onsubmit="return confirm('از حذف این محصول مطمئنی؟')">
 
-                                    <td>
-                                        <?= htmlspecialchars($product['manufacturer'], ENT_QUOTES, 'UTF-8') ?>
-                                    </td>
+                                            <input type="hidden" name="action" value="delete">
 
-                                    <td>
-                                        <?= htmlspecialchars($product['type'], ENT_QUOTES, 'UTF-8') ?>
+                                            <input type="hidden" name="id" value="<?= (int) $product['id'] ?>">
+
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                حذف
+                                            </button>
+
+                                        </form>
                                     </td>
                                 </tr>
-
                             <?php endforeach; ?>
-
                         </tbody>
 
                     </table>
