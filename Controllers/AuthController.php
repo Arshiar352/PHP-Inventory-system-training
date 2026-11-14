@@ -292,12 +292,17 @@ class AuthController
         setcookie(
             session_name(),
             '',
-            time() - 3600,
-            $params['path'],
-            $params['domain'],
-            $params['secure'],
-            $params['httponly']
+            [
+                'expires' => time() - 3600,
+                'path' => $params['path'],
+                'domain' => $params['domain'],
+                'secure' => $params['secure'],
+                'httponly' => $params['httponly'],
+                'samesite' => $params['samesite'],
+                'partitioned' => $params['partitioned']
+            ]
         );
+
 
         session_destroy();
 
