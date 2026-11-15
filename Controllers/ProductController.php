@@ -42,12 +42,13 @@ class ProductController
 
 
 
-    public function showProductsPost()
+    public function createProduct()
     {
         global $pdo;
 
         $errors = [];
         $products = [];
+        $editProduct = null;
 
         $name = trim($_POST['name'] ?? '');
         $quantity = $_POST['quantity'] ?? '';
@@ -119,11 +120,79 @@ class ProductController
         }
     }
 
-    public function updateProduct() {}
+    public function updateProduct()
+    {
 
-    public function createProduct() {}
+        global $pdo;
 
-    private function getProductForEdit($id)
+        $errors = [];
+        $products = [];
+        $editProduct = null;
+
+        $prodId = $_POST['id'] ?? '';
+        $name = trim($_POST['name'] ?? '');
+        $quantity = $_POST['quantity'] ?? '';
+        $manufacturer = trim($_POST['manufacturer'] ?? '');
+        $type = trim($_POST['type'] ?? '');
+
+        if (
+            $prodId === '' || !ctype_digit((string) $prodId) || (int) $prodId <= 0
+        ) {
+            $errors[] = 'Invalid product ID.';
+        }
+
+        if ($name === '' || $manufacturer === '' || $type === '') {
+            $errors[] = 'All fields required.';
+        }
+
+        if (
+            $quantity === '' || !ctype_digit((string) $quantity)
+        ) {
+            $errors[] = 'Number cannot be negative.';
+        }
+
+        if (empty($errors)) {
+            $editProduct = $this->getProductForEdit($prodId);
+
+            if ($editProduct === false) {
+                $errors[] = 'Product not found.';
+            }
+        }
+
+
+        if (empty($errors)) {
+
+
+            $stmt = $pdo->prepare('UPDATE products 
+            SET name = ?,
+                 quantity = ?,
+                 manufacturer = ?,
+                 type = ?
+            WHERE id = ?');
+
+            $stmt->execute([
+                $name,
+                $quantity,
+                $manufacturer,
+                $type,
+                $prodId
+            ]);
+
+            header('Location: /products');
+            exit;
+        }
+
+
+        $stmt = $pdo->query('SELECT * FROM products ORDER BY id DESC');
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        require_once __DIR__ . '/../Views/products.php';
+    }
+
+
+
+
+    private function getProductForEdit(string $id)
     {
         global $pdo;
 

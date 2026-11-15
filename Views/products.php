@@ -71,7 +71,7 @@ require __DIR__ . '/partials/head.php';
     </div>
 
     <!-- Edit Product -->
-    <?php if (isset($editProduct) && $editProduct !== null): ?>
+    <?php if (is_array($editProduct)): ?>
 
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
