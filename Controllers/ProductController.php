@@ -11,8 +11,30 @@ class ProductController
 
         $errors = [];
         $products = [];
+        $editProduct = null;
 
-        $stmt = $pdo->query('SELECT * FROM products ORDER BY id DESC');
+        if (isset($_GET['edit'])) {
+
+            $editId = $_GET['edit'];
+
+            if (
+                filter_var($editId, FILTER_VALIDATE_INT) === false ||
+                (int) $editId <= 0
+            ) {
+                $errors[] = 'Invalid product ID.';
+            } else {
+                $editProduct = $this->getProductForEdit($editId);
+
+                if ($editProduct === false) {
+                    $errors[] = 'Product not found.';
+                }
+            }
+        }
+
+        $stmt = $pdo->query(
+            'SELECT * FROM products ORDER BY id DESC'
+        );
+
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         require_once __DIR__ . '/../Views/products.php';
@@ -95,5 +117,22 @@ class ProductController
             header('Location: /products');
             exit;
         }
+    }
+
+    public function updateProduct() {}
+
+    public function createProduct() {}
+
+    private function getProductForEdit($id)
+    {
+        global $pdo;
+
+        $stmt = $pdo->prepare(
+            'SELECT * FROM products WHERE id = ?'
+        );
+
+        $stmt->execute([$id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
