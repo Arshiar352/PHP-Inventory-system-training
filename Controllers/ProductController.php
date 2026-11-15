@@ -31,12 +31,15 @@ class ProductController
             }
         }
 
-        $stmt = $pdo->query(
-            'SELECT * FROM products ORDER BY id DESC'
+        $name = $_GET['name'] ?? '';
+        $manufacturer = $_GET['manufacturer'] ?? '';
+        $type = $_GET['type'] ?? '';
+
+        $products = $this->searchProducts(
+            $name,
+            $manufacturer,
+            $type
         );
-
-        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         require_once __DIR__ . '/../Views/products.php';
     }
 
@@ -129,14 +132,14 @@ class ProductController
         $products = [];
         $editProduct = null;
 
-        $prodId = $_POST['id'] ?? '';
+        $id = $_POST['id'] ?? '';
         $name = trim($_POST['name'] ?? '');
         $quantity = $_POST['quantity'] ?? '';
         $manufacturer = trim($_POST['manufacturer'] ?? '');
         $type = trim($_POST['type'] ?? '');
 
         if (
-            $prodId === '' || !ctype_digit((string) $prodId) || (int) $prodId <= 0
+            $id === '' || !ctype_digit((string) $id) || (int) $id <= 0
         ) {
             $errors[] = 'Invalid product ID.';
         }
@@ -152,7 +155,7 @@ class ProductController
         }
 
         if (empty($errors)) {
-            $editProduct = $this->getProductForEdit($prodId);
+            $editProduct = $this->getProductForEdit($id);
 
             if ($editProduct === false) {
                 $errors[] = 'Product not found.';
@@ -175,7 +178,7 @@ class ProductController
                 $quantity,
                 $manufacturer,
                 $type,
-                $prodId
+                $id
             ]);
 
             header('Location: /products');
@@ -203,5 +206,30 @@ class ProductController
         $stmt->execute([$id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    private function searchProducts(string $name, string $manufacturer, string $type)
+    {
+        global $pdo;
+
+        $name = '%' . trim($name) . '%';
+        $manufacturer = '%' . trim($manufacturer) . '%';
+        $type = '%' . trim($type) . '%';
+
+        $stmt = $pdo->prepare(
+            'SELECT * FROM products
+         WHERE name LIKE :name
+         AND manufacturer LIKE :manufacturer
+         AND type LIKE :type
+         ORDER BY id DESC'
+        );
+
+        $stmt->execute([
+            'name' => $name,
+            'manufacturer' => $manufacturer,
+            'type' => $type
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -23,7 +23,6 @@ require __DIR__ . '/partials/head.php';
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <!-- Add Product -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
 
@@ -70,8 +69,7 @@ require __DIR__ . '/partials/head.php';
         </div>
     </div>
 
-    <!-- Edit Product -->
-    <?php if (is_array($editProduct)): ?>
+    <?php if (isset($editProduct) && $editProduct !== null): ?>
 
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
@@ -136,7 +134,57 @@ require __DIR__ . '/partials/head.php';
 
     <?php endif; ?>
 
-    <!-- Products List -->
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+
+            <h2 class="h5 fw-bold mb-3">جست‌وجوی محصولات</h2>
+
+            <form action="/products" method="GET">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label">نام محصول</label>
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            value="<?= htmlspecialchars($_GET['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">تولیدکننده</label>
+                        <input
+                            type="text"
+                            name="manufacturer"
+                            class="form-control"
+                            value="<?= htmlspecialchars($_GET['manufacturer'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">نوع محصول</label>
+                        <input
+                            type="text"
+                            name="type"
+                            class="form-control"
+                            value="<?= htmlspecialchars($_GET['type'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">
+                    جست‌وجو
+                </button>
+
+                <a href="/products" class="btn btn-secondary mt-3">
+                    پاک کردن فیلترها
+                </a>
+
+            </form>
+        </div>
+    </div>
+
     <?php if (empty($products)): ?>
 
         <div class="card border-0 shadow-sm">
