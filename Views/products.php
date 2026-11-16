@@ -34,7 +34,7 @@ require __DIR__ . '/partials/head.php';
                 <input
                     type="hidden"
                     name="csrf_token"
-                    value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                    value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
                 <div class="row g-3">
 
@@ -86,7 +86,7 @@ require __DIR__ . '/partials/head.php';
                     <input
                         type="hidden"
                         name="csrf_token"
-                        value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
                     <input type="hidden" name="id"
                         value="<?= (int) $editProduct['id'] ?>">
@@ -269,7 +269,7 @@ require __DIR__ . '/partials/head.php';
                                             <input
                                                 type="hidden"
                                                 name="csrf_token"
-                                                value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                                                value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
                                             <input type="hidden" name="id"
                                                 value="<?= (int) $product['id'] ?>">

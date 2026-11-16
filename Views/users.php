@@ -48,7 +48,7 @@ $profilePicture = $user['profile_picture'] ?? null;
                 <input
                     type="hidden"
                     name="csrf_token"
-                    value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                    value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
 
                 <!-- عکس پروفایل -->
@@ -116,7 +116,7 @@ $profilePicture = $user['profile_picture'] ?? null;
                         name="username"
                         class="form-control"
                         maxlength="50"
-                        value="<?= htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') ?>"
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
 
                 </div>
@@ -132,7 +132,7 @@ $profilePicture = $user['profile_picture'] ?? null;
                     <input
                         type="email"
                         class="form-control"
-                        value="<?= htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8') ?>"
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
                         disabled>
 
                 </div>
@@ -148,7 +148,7 @@ $profilePicture = $user['profile_picture'] ?? null;
                     <input
                         type="text"
                         class="form-control"
-                        value="<?= htmlspecialchars($user['mobile'], ENT_QUOTES, 'UTF-8') ?>"
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
                         disabled>
 
                 </div>
