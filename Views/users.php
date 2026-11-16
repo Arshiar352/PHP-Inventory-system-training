@@ -1,20 +1,5 @@
 <?php
 
-/**
- * @var array{
- *     id: int,
- *     username: string,
- *     email: string,
- *     mobile: string,
- *     birth_date: string|null,
- *     profile_picture: string|null
- * } $user
- *
- * @var string $csrfToken
- * @var array $errors
- * @var string|null $success
- */
-
 $pageTitle = 'پروفایل کاربری';
 $bodyClass = 'bg-body-tertiary';
 $showNavbar = true;
@@ -22,16 +7,13 @@ $showNavbar = true;
 require __DIR__ . '/partials/head.php';
 
 $profilePicture = $user['profile_picture'] ?? null;
+
 ?>
 
-<main class="container py-4 py-lg-5">
+<main class="container py-4">
 
-    <div class="mb-4">
-        <h1 class="h3 fw-bold mb-1">پروفایل کاربری</h1>
-        <p class="text-body-secondary mb-0">
-            اطلاعات حساب کاربری خود را مشاهده و ویرایش کنید.
-        </p>
-    </div>
+    <h1 class="h3 fw-bold mb-4">پروفایل کاربری</h1>
+
 
     <?php if (!empty($success)): ?>
         <div class="alert alert-success">
@@ -39,6 +21,8 @@ $profilePicture = $user['profile_picture'] ?? null;
         </div>
     <?php endif; ?>
 
+
+    <!-- نمایش خطاها -->
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -51,7 +35,8 @@ $profilePicture = $user['profile_picture'] ?? null;
         </div>
     <?php endif; ?>
 
-    <div class="card border-0 shadow-sm">
+
+    <div class="card shadow-sm border-0">
         <div class="card-body p-4">
 
             <form
@@ -59,13 +44,16 @@ $profilePicture = $user['profile_picture'] ?? null;
                 method="POST"
                 enctype="multipart/form-data">
 
+
                 <input
                     type="hidden"
                     name="csrf_token"
                     value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
 
 
+                <!-- عکس پروفایل -->
                 <div class="mb-4">
+
                     <label class="form-label fw-semibold">
                         عکس پروفایل
                     </label>
@@ -73,6 +61,7 @@ $profilePicture = $user['profile_picture'] ?? null;
                     <div class="d-flex align-items-center gap-3 flex-wrap">
 
                         <?php if ($profilePicture): ?>
+
                             <img
                                 src="<?= htmlspecialchars($profilePicture, ENT_QUOTES, 'UTF-8') ?>"
                                 alt="Profile Picture"
@@ -80,13 +69,19 @@ $profilePicture = $user['profile_picture'] ?? null;
                                 height="90"
                                 class="rounded-circle border"
                                 style="object-fit: cover;">
+
                         <?php else: ?>
+
                             <div
                                 class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center"
                                 style="width: 90px; height: 90px;">
+
                                 <i class="bi bi-person fs-1 text-secondary"></i>
+
                             </div>
+
                         <?php endif; ?>
+
 
                         <div>
                             <input
@@ -96,18 +91,22 @@ $profilePicture = $user['profile_picture'] ?? null;
                                 accept="image/jpeg,image/png,image/webp">
 
                             <small class="text-body-secondary">
-                                فرمت‌های مجاز: JPG، PNG و WEBP — حداکثر ۲ مگابایت
+                                فرمت‌های مجاز: JPG، PNG و WEBP
+                                - حداکثر حجم: ۲ مگابایت
                             </small>
                         </div>
 
                     </div>
                 </div>
 
+
                 <hr>
 
 
+
                 <div class="mb-3">
-                    <label for="username" class="form-label fw-semibold">
+
+                    <label for="username" class="form-label">
                         نام کاربری
                     </label>
 
@@ -119,11 +118,14 @@ $profilePicture = $user['profile_picture'] ?? null;
                         maxlength="50"
                         value="<?= htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') ?>"
                         required>
+
                 </div>
 
 
+
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">
+
+                    <label class="form-label">
                         ایمیل
                     </label>
 
@@ -132,11 +134,14 @@ $profilePicture = $user['profile_picture'] ?? null;
                         class="form-control"
                         value="<?= htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8') ?>"
                         disabled>
+
                 </div>
 
 
+
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">
+
+                    <label class="form-label">
                         شماره موبایل
                     </label>
 
@@ -145,11 +150,14 @@ $profilePicture = $user['profile_picture'] ?? null;
                         class="form-control"
                         value="<?= htmlspecialchars($user['mobile'], ENT_QUOTES, 'UTF-8') ?>"
                         disabled>
+
                 </div>
 
 
+
                 <div class="mb-4">
-                    <label class="form-label fw-semibold">
+
+                    <label class="form-label">
                         تاریخ تولد
                     </label>
 
@@ -158,7 +166,9 @@ $profilePicture = $user['profile_picture'] ?? null;
                         class="form-control"
                         value="<?= htmlspecialchars($user['birth_date'] ?? 'ثبت نشده', ENT_QUOTES, 'UTF-8') ?>"
                         disabled>
+
                 </div>
+
 
                 <button type="submit" class="btn btn-primary">
                     ذخیره تغییرات

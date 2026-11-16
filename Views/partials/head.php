@@ -7,11 +7,12 @@ $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?: '/';
 $navItems = [
     '/home' => ['label' => 'داشبورد', 'icon' => 'bi-speedometer2'],
     '/products' => ['label' => 'محصولات', 'icon' => 'bi-box-seam'],
-    '/users' => ['label' => 'کاربران', 'icon' => 'bi-people'],
+    '/users' => ['label' => 'پروفایل کاربری', 'icon' => 'bi-person'],
 ];
 ?>
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -123,39 +124,40 @@ $navItems = [
         }
     </style>
 </head>
+
 <body class="<?= htmlspecialchars($bodyClass) ?>">
-<?php if ($showNavbar): ?>
-    <nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/home">
-                <span class="brand-badge"><i class="bi bi-box-seam"></i></span>
-                <span>مدیریت انبار</span>
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-                    aria-controls="mainNavbar" aria-expanded="false" aria-label="باز و بسته کردن منو">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php foreach ($navItems as $itemPath => $item): ?>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2 <?= $currentPath === $itemPath ? 'active' : '' ?>"
-                               href="<?= $itemPath ?>"
-                               <?= $currentPath === $itemPath ? 'aria-current="page"' : '' ?>>
-                                <i class="bi <?= $item['icon'] ?>"></i>
-                                <?= $item['label'] ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-
-                <a href="/logout" class="btn btn-outline-light btn-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-box-arrow-left"></i>
-                    خروج
+    <?php if ($showNavbar): ?>
+        <nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/home">
+                    <span class="brand-badge"><i class="bi bi-box-seam"></i></span>
+                    <span>مدیریت انبار</span>
                 </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="باز و بسته کردن منو">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <?php foreach ($navItems as $itemPath => $item): ?>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 <?= $currentPath === $itemPath ? 'active' : '' ?>"
+                                    href="<?= $itemPath ?>"
+                                    <?= $currentPath === $itemPath ? 'aria-current="page"' : '' ?>>
+                                    <i class="bi <?= $item['icon'] ?>"></i>
+                                    <?= $item['label'] ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+
+                    <a href="/logout" class="btn btn-outline-light btn-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-left"></i>
+                        خروج
+                    </a>
+                </div>
             </div>
-        </div>
-    </nav>
-<?php endif; ?>
+        </nav>
+    <?php endif; ?>

@@ -1,20 +1,14 @@
+
 <?php
 
 require_once __DIR__ . '/../Config/Database.php';
 
 class UserController
 {
-    private const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
-
-    private const ALLOWED_IMAGE_TYPES = [
-        'image/jpeg' => 'jpg',
-        'image/png'  => 'png',
-        'image/webp' => 'webp'
-    ];
-
     public function showUsers(array $currentUser)
     {
         global $pdo;
+
 
         $stmt = $pdo->prepare("
             SELECT id, username, email, mobile, birth_date, profile_picture
@@ -34,10 +28,13 @@ class UserController
             exit('User not found.');
         }
 
+
         $errors = $_SESSION['profile_errors'] ?? [];
         $success = $_SESSION['profile_success'] ?? null;
 
-        unset($_SESSION['profile_errors'], $_SESSION['profile_success']);
+        unset($_SESSION['profile_errors']);
+        unset($_SESSION['profile_success']);
+
 
         if (empty($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -47,6 +44,7 @@ class UserController
 
         require __DIR__ . '/../Views/users.php';
     }
+
 
     public function updateProfile(array $currentUser)
     {
@@ -64,11 +62,11 @@ class UserController
             exit('Invalid CSRF token.');
         }
 
+
         $userId = $currentUser['id'];
+        $username = trim($_POST['username'] ?? '');
         $errors = [];
 
-
-        $username = trim($_POST['username'] ?? '');
 
         if ($username === '') {
             $errors[] = 'نام کاربری نمی‌تواند خالی باشد.';
@@ -96,35 +94,41 @@ class UserController
             }
         }
 
-        $newImagePath = null;
-        $file = null;
-        $imageExtension = null;
 
-        if (
-            isset($_FILES['profile_picture']) &&
-            $_FILES['profile_picture']['error'] !== UPLOAD_ERR_NO_FILE
-        ) {
-            $file = $_FILES['profile_picture'];
+
+        $newImagePath = null;
+        $file = $_FILES['profile_picture'] ?? null;
+
+        if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+
 
             if ($file['error'] !== UPLOAD_ERR_OK) {
                 $errors[] = 'آپلود عکس با خطا مواجه شد.';
-            } elseif ($file['size'] > self::MAX_IMAGE_SIZE) {
+            } elseif ($file['size'] > 2 * 1024 * 1024) {
                 $errors[] = 'حجم عکس نباید بیشتر از ۲ مگابایت باشد.';
             } else {
+
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $mimeType = $finfo->file($file['tmp_name']);
 
-                if ($mimeType === false) {
-                    $errors[] = 'تشخیص نوع فایل امکان‌پذیر نیست.';
-                } elseif (!isset(self::ALLOWED_IMAGE_TYPES[$mimeType])) {
-                    $errors[] = 'فقط تصاویر JPG، PNG و WEBP مجاز هستند.';
-                } elseif (getimagesize($file['tmp_name']) === false) {
-                    $errors[] = 'فایل انتخاب‌شده یک تصویر معتبر نیست.';
+                $allowedTypes = [
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                    'image/webp' => 'webp'
+                ];
+
+                if (
+                    $mimeType === false ||
+                    !isset($allowedTypes[$mimeType]) ||
+                    getimagesize($file['tmp_name']) === false
+                ) {
+                    $errors[] = 'فقط تصاویر معتبر JPG، PNG و WEBP مجاز هستند.';
                 } else {
-                    $imageExtension = self::ALLOWED_IMAGE_TYPES[$mimeType];
+                    $imageExtension = $allowedTypes[$mimeType];
                 }
             }
         }
+
 
 
         if (!empty($errors)) {
@@ -134,7 +138,9 @@ class UserController
         }
 
 
-        if ($file !== null && $imageExtension !== null) {
+
+        if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+
             $uploadDirectory = __DIR__ . '/../uploads/profiles/';
 
             if (!is_dir($uploadDirectory) || !is_writable($uploadDirectory)) {
@@ -146,9 +152,8 @@ class UserController
                 exit;
             }
 
-            $fileName = bin2hex(random_bytes(16))
-                . '.'
-                . $imageExtension;
+
+            $fileName = bin2hex(random_bytes(16)) . '.' . $imageExtension;
 
             $destination = $uploadDirectory . $fileName;
 
@@ -164,7 +169,9 @@ class UserController
             $newImagePath = 'uploads/profiles/' . $fileName;
         }
 
+
         try {
+
             $pdo->beginTransaction();
 
 
@@ -172,7 +179,6 @@ class UserController
                 SELECT profile_picture
                 FROM users
                 WHERE id = :id
-                LIMIT 1
             ");
 
             $stmt->execute([
@@ -196,7 +202,6 @@ class UserController
                     'id' => $userId
                 ]);
             } else {
-
                 $stmt = $pdo->prepare("
                     UPDATE users
                     SET username = :username
@@ -209,7 +214,9 @@ class UserController
                 ]);
             }
 
+
             $pdo->commit();
+
 
 
             if (
@@ -226,6 +233,8 @@ class UserController
 
             $_SESSION['profile_success'] = 'پروفایل با موفقیت به‌روزرسانی شد.';
         } catch (Throwable $e) {
+
+
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();
             }
