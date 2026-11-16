@@ -271,6 +271,17 @@ class AuthController
     {
         global $pdo;
 
+        $submittedToken = $_POST['csrf_token'] ?? '';
+
+        if (
+            empty($_SESSION['csrf_token']) ||
+            !is_string($submittedToken) ||
+            !hash_equals($_SESSION['csrf_token'], $submittedToken)
+        ) {
+            http_response_code(403);
+            exit('Invalid CSRF token.');
+        }
+
         if (isset($_COOKIE['remember_token'])) {
 
             $tokenParts = explode(':', $_COOKIE['remember_token']);

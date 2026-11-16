@@ -2,6 +2,10 @@
 
 session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 require_once __DIR__ . '/Controllers/AuthController.php';
 
 $authController = new AuthController();
@@ -141,12 +145,19 @@ switch ($path) {
         break;
 
     case '/logout':
-        require_once __DIR__ . '/Controllers/AuthController.php';
+        if ($method === 'POST') {
 
-        $controller = new AuthController();
-        $controller->logout();
+            require_once __DIR__ . '/Controllers/AuthController.php';
+
+            $controller = new AuthController();
+            $controller->logout();
+        } else {
+
+            http_response_code(405);
+            echo 'Method not allowed.';
+        }
+
         break;
-
 
     default:
         http_response_code(404);

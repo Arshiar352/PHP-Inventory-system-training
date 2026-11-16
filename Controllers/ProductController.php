@@ -40,6 +40,13 @@ class ProductController
             $manufacturer,
             $type
         );
+
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        $csrfToken = $_SESSION['csrf_token'];
+
         require_once __DIR__ . '/../Views/products.php';
     }
 
@@ -48,6 +55,7 @@ class ProductController
     public function createProduct()
     {
         global $pdo;
+        $this->checkCsrfToken();
 
         $errors = [];
         $products = [];
@@ -97,6 +105,7 @@ class ProductController
     {
 
         global $pdo;
+        $this->checkCsrfToken();
 
         $errors = [];
 
@@ -127,6 +136,7 @@ class ProductController
     {
 
         global $pdo;
+        $this->checkCsrfToken();
 
         $errors = [];
         $products = [];
@@ -193,7 +203,19 @@ class ProductController
     }
 
 
+    private function checkCsrfToken()
+    {
+        $submittedToken = $_POST['csrf_token'] ?? '';
 
+        if (
+            empty($_SESSION['csrf_token']) ||
+            !is_string($submittedToken) ||
+            !hash_equals($_SESSION['csrf_token'], $submittedToken)
+        ) {
+            http_response_code(403);
+            exit('Invalid CSRF token.');
+        }
+    }
 
     private function getProductForEdit(string $id)
     {
