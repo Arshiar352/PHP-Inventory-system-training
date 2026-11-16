@@ -123,20 +123,23 @@ switch ($path) {
 
         break;
 
+
     case '/users':
         require_once __DIR__ . '/Controllers/UserController.php';
 
+        $userController = new UserController();
+
         if ($method === 'GET') {
-
-            $user = new UserController();
-            $user->showUsers();
+            $userController->showUsers($currentUser);
+        } elseif ($method === 'POST') {
+            $userController->updateProfile($currentUser);
         } else {
-
             http_response_code(405);
             echo 'Method not allowed.';
         }
 
         break;
+
     case '/logout':
         require_once __DIR__ . '/Controllers/AuthController.php';
 
