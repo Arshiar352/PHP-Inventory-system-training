@@ -62,7 +62,31 @@ class AuthController
 
             session_regenerate_id(true);
 
-            $_SESSION['user_id'] = $user['id'];
+            $tokenData = $this->generateToken();
+
+            $id = $user['id'];
+            $selector = $tokenData['selector'];
+            $validator = $tokenData['validator'];
+            $tokenHash = $tokenData['token_hash'];
+
+            $expiresTimestamp = time() + (7 * 24 * 60 * 60);
+
+            $expiresAt = date('Y-m-d H:i:s', $expiresTimestamp);
+
+            $stmt = $pdo->prepare(
+                'INSERT INTO auth_tokens (user_id, selector, token_hash, expires_at)
+                    VALUES (?, ?, ?, ?)'
+            );
+            $stmt->execute([$id, $selector, $tokenHash, $expiresAt]);
+
+            setcookie('remember_token', $selector . ':' . $validator, [
+                'expires' => $expiresTimestamp,
+                'path' => '/',
+                'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+
 
             header('Location: /home');
             exit;
@@ -245,25 +269,34 @@ class AuthController
 
     public function logout()
     {
-        $_SESSION = [];
+        global $pdo;
 
-        $params = session_get_cookie_params();
+        if (isset($_COOKIE['remember_token'])) {
 
-        setcookie(
-            session_name(),
-            '',
-            [
-                'expires' => time() - 3600,
-                'path' => $params['path'],
-                'domain' => $params['domain'],
-                'secure' => $params['secure'],
-                'httponly' => $params['httponly'],
-                'samesite' => $params['samesite'],
-                'partitioned' => $params['partitioned']
-            ]
-        );
+            $tokenParts = explode(':', $_COOKIE['remember_token']);
 
-        session_destroy();
+            if (
+                count($tokenParts) === 2 &&
+                strlen($tokenParts[0]) === 32 &&
+                ctype_xdigit($tokenParts[0])
+            ) {
+                $selector = $tokenParts[0];
+
+                $stmt = $pdo->prepare(
+                    'DELETE FROM auth_tokens WHERE selector = ?'
+                );
+
+                $stmt->execute([$selector]);
+            }
+        }
+
+        setcookie('remember_token', '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            'httponly' => true,
+            'samesite' => 'Lax'
+        ]);
 
         header('Location: /login');
         exit;
@@ -297,5 +330,80 @@ class AuthController
             '٨' => '8',
             '٩' => '9'
         ]);
+    }
+
+
+
+    private function generateToken()
+    {
+
+
+
+        $selector = bin2hex(random_bytes(16));
+        $validator = bin2hex(random_bytes(32));
+
+        $tokenHash = hash('sha256', $validator);
+
+        return [
+            'selector' => $selector,
+            'validator' => $validator,
+            'token_hash' => $tokenHash
+        ];
+    }
+
+    public function validateToken()
+    {
+        global $pdo;
+
+        if (!isset($_COOKIE['remember_token'])) {
+            return false;
+        }
+
+        $tokenParts = explode(':', $_COOKIE['remember_token']);
+
+        if (count($tokenParts) !== 2) {
+            return false;
+        }
+
+        $selector = $tokenParts[0];
+        $validator = $tokenParts[1];
+
+        if (
+            strlen($selector) !== 32 || !ctype_xdigit($selector) || strlen($validator) !== 64 || !ctype_xdigit($validator)
+        ) {
+            return false;
+        }
+
+        $stmt = $pdo->prepare(
+            'SELECT
+            auth_tokens.token_hash,
+            users.id,
+            users.username,
+            users.email,
+            users.mobile
+        FROM auth_tokens
+        INNER JOIN users ON users.id = auth_tokens.user_id
+        WHERE auth_tokens.selector = ?
+        AND auth_tokens.expires_at > NOW()
+        LIMIT 1'
+        );
+
+        $stmt->execute([$selector]);
+
+        $token = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$token) {
+            return false;
+        }
+
+        $tokenHash = hash('sha256', $validator);
+
+        if (!hash_equals($token['token_hash'], $tokenHash)) {
+            return false;
+        }
+
+        unset($token['token_hash']);
+
+        return $token;
     }
 }

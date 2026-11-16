@@ -1,29 +1,39 @@
 <?php
 
-
 session_start();
 
+require_once __DIR__ . '/Controllers/AuthController.php';
 
-$path = rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), '/');
+$authController = new AuthController();
+$currentUser = $authController->validateToken();
+
+$path = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 if ($path === '') {
     $path = '/';
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
+
 $protectedRoutes = ['/home', '/products', '/users'];
-$isLoggedIn = isset($_SESSION['user_id']);
-$guestRoutes = ['/register', '/login', '/'];
 
-if ((!$isLoggedIn) && (in_array($path, $protectedRoutes))) {
-
+if (
+    in_array($path, $protectedRoutes, true) &&
+    $currentUser === false
+) {
     header('Location: /login');
     exit;
-} elseif (($isLoggedIn) && (in_array($path, $guestRoutes))) {
+}
 
+if (
+    in_array($path, ['/login', '/register', '/'], true) &&
+    $currentUser !== false
+) {
     header('Location: /home');
     exit;
 }
+
+
 
 switch ($path) {
     case '/':
@@ -116,10 +126,17 @@ switch ($path) {
     case '/users':
         require_once __DIR__ . '/Controllers/UserController.php';
 
-        $user = new UserController();
-        $user->showUsers();
-        break;
+        if ($method === 'GET') {
 
+            $user = new UserController();
+            $user->showUsers();
+        } else {
+
+            http_response_code(405);
+            echo 'Method not allowed.';
+        }
+
+        break;
     case '/logout':
         require_once __DIR__ . '/Controllers/AuthController.php';
 
